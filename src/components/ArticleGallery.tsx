@@ -1,21 +1,26 @@
 import {Article} from "../types/Article.ts";
-import ArticleCard from "./ArticleCard.tsx";
 import './ArticleGallery.css';
+import SearchComponent from "./SearchComponent.tsx";
+import {useState} from "react";
+import ArticleCard from "./ArticleCard.tsx";
 
 type ArticleGalleryProps = {
     articles: Article[],
 }
 
-export default function ArticleGallery(props: Readonly<ArticleGalleryProps>){
-    let articles = props.articles.map((article) => <ArticleCard handleDelete={deleteArticle} key={article.id} article={article} />);
+export default function ArticleGallery(props: Readonly<ArticleGalleryProps>) {
+    const [filteredArticles, setFilteredArticles] = useState<Article[]>(props.articles)
 
-    function deleteArticle(id: string){
-        console.log(`Deleting article with id: ${id}`);
-        articles = articles.filter((article) => article.key !== id);
+    function filterArticle(searchText: string) {
+        setFilteredArticles(props.articles.filter((article) => article.title.toLowerCase().includes(searchText.toLowerCase())))
     }
 
-    return(
+    const articles = filteredArticles.map((article) => <ArticleCard article={article}
+                                                                    handleDelete={() => console.log("Deleted")}/>)
+
+    return (
         <div className="article-gallery">
+            <SearchComponent handleSearchText={filterArticle}/>
             {articles}
         </div>
     );

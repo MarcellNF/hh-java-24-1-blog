@@ -4,6 +4,7 @@ import Header from "./Header.tsx";
 type LayoutProps = {
     children: ReactNode,
 }
+
 export default function Layout(props: Readonly<LayoutProps>) {
     return (
         <>
